@@ -1,0 +1,17 @@
+{
+  "repo": "ocamlmaze",
+  "thresholds": {
+    "signal": 2,
+    "slack": 2,
+    "confidence": 2,
+    "drag": 3,
+    "ship": 208,
+    "watch": 117
+  },
+  "terms": [
+    "input width",
+    "search depth",
+    "boundary pressure",
+    "complexity"
+  ]
+}

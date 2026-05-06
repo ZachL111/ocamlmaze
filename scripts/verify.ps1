@@ -58,6 +58,13 @@ foreach ($pathPattern in $knownPaths) {
   }
 }
 
-ocaml tests/test.ml
+ocaml -I src tests/test.ml
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ocamlmaze-detail.ps1
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ocamlmaze-properties.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-ocamlmaze-golden.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
