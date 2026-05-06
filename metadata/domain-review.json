@@ -1,0 +1,73 @@
+{
+  "repo": "ocamlmaze",
+  "language": "OCaml",
+  "category": "Algorithms",
+  "goal": "Generate mazes, solve shortest paths, and export stable ASCII fixtures.",
+  "review_model": {
+    "terms": [
+      "input width",
+      "search depth",
+      "boundary pressure",
+      "complexity"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "input width",
+      "signal": 43,
+      "slack": 40,
+      "drag": 32,
+      "confidence": 81,
+      "score": 111,
+      "lane": "watch"
+    },
+    {
+      "name": "stress",
+      "focus": "search depth",
+      "signal": 43,
+      "slack": 43,
+      "drag": 30,
+      "confidence": 54,
+      "score": 93,
+      "lane": "hold"
+    },
+    {
+      "name": "edge",
+      "focus": "boundary pressure",
+      "signal": 56,
+      "slack": 32,
+      "drag": 22,
+      "confidence": 59,
+      "score": 137,
+      "lane": "watch"
+    },
+    {
+      "name": "recovery",
+      "focus": "complexity",
+      "signal": 86,
+      "slack": 51,
+      "drag": 19,
+      "confidence": 86,
+      "score": 252,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "input width",
+      "signal": 61,
+      "slack": 32,
+      "drag": 16,
+      "confidence": 67,
+      "score": 173,
+      "lane": "ship"
+    }
+  ]
+}

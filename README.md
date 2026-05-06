@@ -1,68 +1,40 @@
 # ocamlmaze
 
-`ocamlmaze` packages a practical algorithms exercise in OCaml. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
+`ocamlmaze` is a compact OCaml repository for algorithms, centered on this goal: Generate mazes, solve shortest paths, and export stable ASCII fixtures.
 
-## How I Read Ocamlmaze
+## Why This Exists
 
-The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## Problem Shape
+## Ocamlmaze Review Notes
 
-This project keeps the domain idea close to the tests. That makes it useful as a reference implementation, a small experiment, or a starting point for a more specialized tool.
+Start with `complexity` and `search depth`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
-## Scenario Walkthrough
+## Capabilities
 
-`degraded` is the first example I would inspect because it lands on the `review` path with a score of -38. The broader file also keeps `degraded` at -38 and `surge` at 220, which gives the model a useful low-to-high spread.
+- `fixtures/domain_review.csv` adds cases for input width and search depth.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/ocamlmaze-walkthrough.md` walks through the case spread.
+- The OCaml code includes a review path for `complexity` and `search depth`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Internal Model
+## Implementation Shape
 
-The project is organized around a compact model rather than a large framework. Inputs are scored, classified, and checked against golden fixtures. The constants live in code and are mirrored in metadata so documentation drift is easy to catch. The OCaml implementation keeps the data record and functions small enough to load directly in the test file.
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Main Behaviors
+The added OCaml path is deliberately direct, with fixtures doing most of the explaining.
 
-- Models input shape with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep complexity tradeoffs changes visible in code review.
-- Includes extended examples for golden cases, including `surge` and `degraded`.
-- Documents boundary checks tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-
-## How To Run It
+## Local Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Verification
 
-## Validation
+The check exercises the source code and the review fixture. `recovery` is the high score at 252; `stress` is the low score at 93.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Roadmap
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Repository Map
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Follow-Up Work
-
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Add one more algorithms fixture that focuses on a malformed or borderline input.
-
-## Known Edges
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
-
-## Run It Locally
-
-Use a normal shell with OCaml available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
+The repository is intentionally scoped to local checks. I would expand it by adding adversarial fixtures before adding features.
